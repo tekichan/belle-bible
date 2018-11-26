@@ -2,14 +2,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
-import { BibleVersesService } from './bible-verses.service';
-
-
-// TODO: Replace this with your own data model type
-export interface BibleVersesItem {
-  verse_num: number;
-  verse_content: string;
-}
+import { BibleVersesItem } from './bible-verses-item';
 
 /**
  * Data source for the BibleVerses view. This class should
@@ -17,22 +10,16 @@ export interface BibleVersesItem {
  * (including sorting, pagination, and filtering).
  */
 export class BibleVersesDataSource extends DataSource<BibleVersesItem> {
-  data: BibleVersesItem[] = [];
-
-  constructor(private paginator: MatPaginator, private sort: MatSort, private bibleVersesService: BibleVersesService) {
-    super();
+  constructor(
+    private paginator: MatPaginator
+    , private sort: MatSort
+    , private data: BibleVersesItem[]
+    ) {
+      super();
   }
 
-  ngOnInit() {
-    this.getVerses();
-  }
-
-  getVerses(): void {
-    this.bibleVersesService.getJSON().subscribe(
-      jsonData => {
-        console.log(jsonData['books'])
-      }
-    )
+  refresh(): void {
+    this.data = [];
   }
 
   /**
@@ -84,8 +71,8 @@ export class BibleVersesDataSource extends DataSource<BibleVersesItem> {
     return data.sort((a, b) => {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
-        case 'name': return compare(a.verse_content, b.verse_content, isAsc);
-        case 'id': return compare(+a.verse_num, +b.verse_num, isAsc);
+        case 'verse_content': return compare(a.verse_content, b.verse_content, isAsc);
+        case 'verse_num': return compare(+a.verse_num, +b.verse_num, isAsc);
         default: return 0;
       }
     });

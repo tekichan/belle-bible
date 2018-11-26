@@ -2,13 +2,13 @@
   <table mat-table class="full-width-table" [dataSource]="dataSource" matSort aria-label="Elements">
     <!-- verse_num Column -->
     <ng-container matColumnDef="verse_num">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>verse_num</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>順序</th>
       <td mat-cell *matCellDef="let row">{{row.verse_num}}</td>
     </ng-container>
 
     <!-- verse_content Column -->
     <ng-container matColumnDef="verse_content">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>verse_content</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>經文</th>
       <td mat-cell *matCellDef="let row">{{row.verse_content}}</td>
     </ng-container>
 
