@@ -6,7 +6,7 @@
     <mat-toolbar>和合本</mat-toolbar>
     <mat-toolbar color="success">舊約</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#" click="showBook('genesis')">創世記</a>
+      <a mat-list-item href="#" (click)="showBook('Gen')">創世記</a>
       <a mat-list-item href="#">出埃及記</a>
       <a mat-list-item href="#">利未記</a>
     </mat-nav-list>
@@ -24,5 +24,17 @@
       <span>聖經小程序</span>
     </mat-toolbar>
     <!-- Add Content Here -->
+    <div *ngIf="isBookSelected">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              {{selectedBook}}
+            </mat-card-title>
+          </mat-card-header>
+        <mat-card-content>
+          <app-bible-verses></app-bible-verses>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

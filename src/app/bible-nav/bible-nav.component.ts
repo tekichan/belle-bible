@@ -22,8 +22,9 @@ export class BibleNavComponent {
 
   showBook(bookName: string) {
     if (bookName) {
-      this.isBookSelected = false;
+      this.isBookSelected = true;
       this.selectedBook = bookName;
+      console.log(bookName)
     } else {
       this.isBookSelected = false;
     }
