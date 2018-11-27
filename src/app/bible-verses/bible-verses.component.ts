@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, Input, AfterViewInit } from '@angular/cor
 import { MatPaginator, MatSort } from '@angular/material';
 import { BibleVersesDataSource } from './bible-verses-datasource';
 import { BibleService } from '../bible-service/bible.service';
+import { TextToSpeechService } from '../bible-service/text-to-speech.service';
+import { BibleVersesItem } from './bible-verses-item';
 
 @Component({
   selector: 'app-bible-verses',
@@ -17,11 +19,12 @@ export class BibleVersesComponent implements OnInit {
   displayedColumns = ['verse_num', 'verse_content'];
 
   displayBookList: any[];
+  verseItems: BibleVersesItem[];
 
   selectedBook: string = 'Gen';
   selectedChapter: string = "1";
 
-  constructor(private bibleVersesService: BibleService) {
+  constructor(private bibleVersesService: BibleService, private ttsService: TextToSpeechService) {
   }
 
   @Input()
@@ -41,10 +44,13 @@ export class BibleVersesComponent implements OnInit {
       , []
     );
    this.bibleVersesService.getBibleVersesItem(this.selectedBook, Number(this.selectedChapter)).subscribe(
-     verseItems => {this.dataSource = new BibleVersesDataSource(
-      this.paginator
-      , this.sort
-      , verseItems);
+     verseItems => {
+        this.verseItems = verseItems
+        this.dataSource = new BibleVersesDataSource(
+                          this.paginator
+                          , this.sort
+                          , this.verseItems
+        );
      }
    );
    this.bibleVersesService.getBibleBooks().subscribe(
@@ -59,5 +65,16 @@ export class BibleVersesComponent implements OnInit {
     } else {
       return '';
     }
+  }
+
+  playVerse(verseContent: string): void {
+    this.ttsService.postText(verseContent, 'zh-hk').subscribe(
+      responseData => {
+        let audio = new Audio();
+        audio.src = responseData;
+        audio.load();
+        audio.play();
+      }
+    )
   }
 }

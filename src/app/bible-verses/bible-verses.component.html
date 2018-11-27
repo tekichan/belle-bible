@@ -16,7 +16,7 @@
         <!-- verse_content Column -->
         <ng-container matColumnDef="verse_content">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>經文</th>
-          <td mat-cell *matCellDef="let row">{{row.verse_content}}</td>
+          <td mat-cell *matCellDef="let row" (click)="playVerse(row.verse_content)">{{row.verse_content}}</td>
         </ng-container>
     
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

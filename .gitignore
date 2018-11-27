@@ -37,3 +37,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Private File
+/src/app/bible-service/text-to-speech.config.ts
