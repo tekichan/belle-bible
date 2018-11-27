@@ -3,13 +3,15 @@
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="!(isHandset$ | async)">
-    <mat-toolbar>和合本</mat-toolbar>
-    <mat-toolbar color="success">舊約</mat-toolbar>
-    <mat-nav-list>
-      <a mat-list-item href="#" (click)="showBook('Gen')">創世記</a>
-      <a mat-list-item href="#">出埃及記</a>
-      <a mat-list-item href="#">利未記</a>
+    <mat-toolbar (click)="showHomepage()"><mat-icon>import_contacts</mat-icon>&nbsp; 和合本</mat-toolbar>
+    <mat-toolbar color="success" (click)="toggleTestament('old')">舊約</mat-toolbar>
+    <mat-nav-list *ngIf="showOldTest">
+      <a mat-list-item href="#" *ngFor="let bookAbbr of oldTestament" (click)="showBook(bookAbbr)">{{displayBook(bookAbbr)}}</a>
     </mat-nav-list>
+    <mat-toolbar color="success" (click)="toggleTestament('new')">新約</mat-toolbar>
+    <mat-nav-list *ngIf="showNewTest">
+      <a mat-list-item href="#" *ngFor="let bookAbbr of newTestament" (click)="showBook(bookAbbr)">{{displayBook(bookAbbr)}}</a>
+    </mat-nav-list>    
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
@@ -21,20 +23,11 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>聖經小程序</span>
+      <span>美麗的聖經</span>
     </mat-toolbar>
     <!-- Add Content Here -->
-    <div *ngIf="isBookSelected">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>
-              {{selectedBook}}
-            </mat-card-title>
-          </mat-card-header>
-        <mat-card-content>
-          <app-bible-verses [book]="selectedBook"></app-bible-verses>
-        </mat-card-content>
-      </mat-card>
-    </div>
+    <div *ngIf="selectedBook;then show_chapters else show_homepage"></div>
+    <ng-template #show_chapters><app-bible-chapters [book]="selectedBook" [chapter]="selectedChapter"></app-bible-chapters></ng-template>
+    <ng-template #show_homepage><img src="./assets/cross.png" style="margin-left: auto; margin-right: auto; display: block;" width="80%" /></ng-template>
   </mat-sidenav-content>
 </mat-sidenav-container>

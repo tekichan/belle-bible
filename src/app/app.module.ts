@@ -14,15 +14,17 @@ import {
   , MatIconModule
   , MatListModule 
 
-  , MatCardModule, MatTreeModule, MatTableModule, MatPaginatorModule, MatSortModule
+  , MatCardModule, MatTreeModule, MatTableModule, MatPaginatorModule, MatSortModule, MatGridListModule, MatMenuModule
 } from '@angular/material';
 import { BibleVersesComponent } from './bible-verses/bible-verses.component';
+import { BibleChaptersComponent } from './bible-chapters/bible-chapters.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BibleNavComponent,
-    BibleVersesComponent
+    BibleVersesComponent,
+    BibleChaptersComponent
   ],
   imports: [
     BrowserModule
@@ -37,7 +39,7 @@ import { BibleVersesComponent } from './bible-verses/bible-verses.component';
     , MatIconModule
     , MatListModule
 
-    , MatCardModule, MatTreeModule, MatTableModule, MatPaginatorModule, MatSortModule
+    , MatCardModule, MatTreeModule, MatTableModule, MatPaginatorModule, MatSortModule, MatGridListModule, MatMenuModule
   ],
   providers: [],
   bootstrap: [AppComponent]

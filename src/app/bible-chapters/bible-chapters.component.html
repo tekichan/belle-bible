@@ -1,0 +1,13 @@
+<div class="grid-container" *ngIf="selectedChapter == '0'">
+  <h1 class="mat-h1">
+      {{displayBook()}}
+  </h1>
+  <mat-grid-list cols="10" rowHeight="1:1">
+    <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
+      <mat-card class="dashboard-card" layout="row" layout-align="center center" (click)="selectChapter(card.title)">
+          <mat-card-content class="dashboard-card-content">{{card.title}}</mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+<app-bible-verses [book]="selectedBook" [chapter]="selectedChapter" *ngIf="selectedChapter != '0'"></app-bible-verses>

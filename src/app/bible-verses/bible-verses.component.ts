@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, AfterViewInit } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { BibleVersesDataSource } from './bible-verses-datasource';
-import { BibleVersesService } from './bible-verses.service';
+import { BibleService } from '../bible-service/bible.service';
 
 @Component({
   selector: 'app-bible-verses',
@@ -16,9 +16,12 @@ export class BibleVersesComponent implements OnInit {
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['verse_num', 'verse_content'];
 
-  selectedBook: string;
+  displayBookList: any[];
 
-  constructor(private bibleVersesService: BibleVersesService) {
+  selectedBook: string = 'Gen';
+  selectedChapter: string = "1";
+
+  constructor(private bibleVersesService: BibleService) {
   }
 
   @Input()
@@ -26,24 +29,35 @@ export class BibleVersesComponent implements OnInit {
     this.selectedBook = bookName;
   }
 
+  @Input()
+  set chapter(chapterNum: string) {
+    this.selectedChapter = chapterNum;
+  }  
+
   ngOnInit() {
     this.dataSource = new BibleVersesDataSource(
       this.paginator
       , this.sort
       , []
     );
-    this.bibleVersesService.getJSON().subscribe(
-      jsonData => {
-        this.dataSource = new BibleVersesDataSource(
-          this.paginator
-          , this.sort
-          , jsonData['books']
-          .filter(obj => obj['book'] == this.selectedBook && obj['chapter_num'] == 1)
-          .map(obj => {
-            return {verse_num: obj['verse_num'], verse_content: obj['verse']};
-          })
-        );
-      }
+   this.bibleVersesService.getBibleVersesItem(this.selectedBook, Number(this.selectedChapter)).subscribe(
+     verseItems => {this.dataSource = new BibleVersesDataSource(
+      this.paginator
+      , this.sort
+      , verseItems);
+     }
+   );
+   this.bibleVersesService.getBibleBooks().subscribe(
+    books => { this.displayBookList = books; }
     );
+  }
+
+  displayBook(): string {
+    if (this.displayBookList) {
+      let bookObj = this.displayBookList.find(obj => obj['abbr'] == this.selectedBook);
+      return bookObj['zh_tw'] + ' ' + bookObj['en'];
+    } else {
+      return '';
+    }
   }
 }
