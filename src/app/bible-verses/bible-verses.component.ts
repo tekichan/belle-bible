@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, AfterViewInit, ElementRef } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { BibleVersesDataSource } from './bible-verses-datasource';
 import { BibleService } from '../bible-service/bible.service';
@@ -13,6 +13,8 @@ import { BibleVersesItem } from './bible-verses-item';
 export class BibleVersesComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('audioPlayback') audioPlayerRef: ElementRef;
+
   dataSource: BibleVersesDataSource;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
@@ -70,7 +72,7 @@ export class BibleVersesComponent implements OnInit {
   playVerse(verseContent: string): void {
     this.ttsService.postText(verseContent, 'zh-hk').subscribe(
       responseData => {
-        let audio = new Audio();
+        let audio = this.audioPlayerRef.nativeElement;
         audio.src = responseData;
         audio.load();
         audio.play();

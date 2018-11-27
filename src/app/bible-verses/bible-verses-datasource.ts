@@ -13,7 +13,7 @@ export class BibleVersesDataSource extends DataSource<BibleVersesItem> {
   constructor(
     private paginator: MatPaginator
     , private sort: MatSort
-    , private data: BibleVersesItem[]
+    , public data: BibleVersesItem[]
     ) {
       super();
   }
