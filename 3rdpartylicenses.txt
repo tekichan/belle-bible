@@ -352,6 +352,8 @@ MIT
 
 @angular/material/tooltip
 
+@angular/material/bottom-sheet
+
 @angular/forms
 MIT
 
