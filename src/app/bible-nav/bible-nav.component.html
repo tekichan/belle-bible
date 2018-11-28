@@ -24,10 +24,15 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span>美麗的聖經</span>
+      <span style="flex: 1 1 auto;"></span>
+      <mat-icon style="padding: 0 14px;" (click)="showHelp()">help</mat-icon>
     </mat-toolbar>
     <!-- Add Content Here -->
     <div *ngIf="selectedBook;then show_chapters else show_homepage"></div>
     <ng-template #show_chapters><app-bible-chapters [book]="selectedBook" [chapter]="selectedChapter"></app-bible-chapters></ng-template>
-    <ng-template #show_homepage><img src="./assets/cross.png" style="margin-left: auto; margin-right: auto; display: block;" width="80%" /></ng-template>
+    <ng-template #show_homepage><div class="div-bgimg">
+      <div class="div-space">&nbsp;</div>
+      <div class="div-text" *ngIf="randomVerse">{{randomVerse.verse}} &nbsp;<br/><i>《{{displayBook(randomVerse.book)}}》 {{randomVerse.chapter_num}}：{{randomVerse.verse_num}}</i></div>
+    </div></ng-template>
   </mat-sidenav-content>
 </mat-sidenav-container>

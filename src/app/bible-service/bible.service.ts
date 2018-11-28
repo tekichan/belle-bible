@@ -13,10 +13,17 @@ export class BibleService {
   bibleObject: any;
 
   constructor(private http: HttpClient) {
+    this.http.get(bible_url).subscribe(
+        jsonData => this.bibleObject = jsonData
+    );
   }
 
   public getJSON(): Observable<any> {
-      return this.http.get(bible_url);
+    if (this.bibleObject) {
+        return observableOf(this.bibleObject);
+    } else {
+        return this.http.get(bible_url);
+    }
   }
 
   public getBibleVersesItem(bookName: string, chapterNum: number): Observable<BibleVersesItem[]> {        
@@ -66,6 +73,20 @@ export class BibleService {
               jsonData => jsonData['book_list']
           )
       );
+  }
+
+  public getBibleVerses(): Observable<any[]> {
+    let bibleObservable: Observable<any>;
+    if (this.bibleObject) {
+        bibleObservable = observableOf(this.bibleObject);
+    } else {
+        bibleObservable = this.getJSON();
+    }          
+    return bibleObservable.pipe(
+        map(
+            jsonData => jsonData['verses']
+        )
+    );
   }
 
   private onlyUnique(value, index, self) { 

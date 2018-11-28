@@ -3,6 +3,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BibleService } from '../bible-service/bible.service';
+import { MatBottomSheet } from '@angular/material';
+import { BibleHelpComponent } from '../bible-help/bible-help.component';
 
 @Component({
   selector: 'app-bible-nav',
@@ -26,7 +28,13 @@ export class BibleNavComponent implements OnInit {
   oldTestament: any[];
   newTestament: any[];
 
-  constructor(private breakpointObserver: BreakpointObserver, private bibleVersesService: BibleService) {}
+  randomVerse: any;
+
+  constructor(
+    private breakpointObserver: BreakpointObserver
+    , private bibleVersesService: BibleService
+    , private bottomSheet: MatBottomSheet
+  ) {}
 
   ngOnInit() {
    this.bibleVersesService.getBibleBooks().subscribe(
@@ -36,13 +44,14 @@ export class BibleNavComponent implements OnInit {
       this.newTestament = books.filter(bookObj => bookObj['testament'] == 'new').map(bookObj => bookObj['abbr']);
       }
     );
+    this.showHomepage();
   }
 
   showBook(bookName: string) {
     if (bookName) {
       this.selectedBook = bookName;
       this.selectedChapter = "0";
-      console.log("BibleNavComponent: " + this.selectedBook + ", " + this.selectedChapter);
+      console.log("BibleNavComponent: " + this.selectedBook);
     }
   }
 
@@ -62,5 +71,15 @@ export class BibleNavComponent implements OnInit {
   showHomepage(): void {
     this.selectedBook = null;
     this.selectedChapter = "0";
+    this.bibleVersesService.getBibleVerses().subscribe(
+      verseItems => {
+        let randomIdx = Math.floor(Math.random() * verseItems.length);
+        this.randomVerse = verseItems[randomIdx];
+      }
+    )
+  }
+
+  showHelp(): void {
+    this.bottomSheet.open(BibleHelpComponent);
   }
 }
