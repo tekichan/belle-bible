@@ -1,6 +1,6 @@
 # Belle's Bible (belle-bible)
 ### A simple bible app with Angular Material with Text To Speech (TTS) service in Cantonese.
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE) 
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](/doc/LICENSE) 
 
 ## Introduction
 This is a simple Single Page Application (SPA) to provide TTS service in Cantonese for Traditional Chinese (zh-TW) Bible as Chinese Union Version (CUV). This app makes use of [Angular](https://angular.io/) as a frontend framework and [Angular Material](https://material.angular.io/) to fulfill [Material Design](https://material.io/) as visual principle.
@@ -12,8 +12,12 @@ This is a simple Single Page Application (SPA) to provide TTS service in Cantone
 4. Install [angular-cli-ghpages](https://www.npmjs.com/package/angular-cli-ghpages) for deploying a production build to [Github Pages](https://pages.github.com/)
 
 ## Getting Started
+### High Level Design
+![High Level Design](/doc/bellebible_highleveldesign.png)
 
-## A little bit about Angular CLI
+The app runs with app.component.ts which is a default entry point of Angular app. It uses bible-nav to define the whole frame with menu bar, side bar and the container of the main content. The menu bar points to bible-help for everywhere help screen. The side bar can trigger the change of the main content to show bible-chapters to list chapters of a selected book. After a chapter is selected, verses of the chapter will show. bible-service consists of service classes, which bridge this app with the remote data sources, such as another asset path or TTS provider.
+
+## *A little bit about Angular CLI*
 ### Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
