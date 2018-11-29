@@ -1,6 +1,6 @@
 # Belle's Bible (belle-bible)
 ### A simple bible app with Angular Material with Text To Speech (TTS) service in Cantonese.
-[![License](https://img.shields.io/npm/l/:package.svg)](/LICENSE) 
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE) 
 
 ## Introduction
 This is a simple Single Page Application (SPA) to provide TTS service in Cantonese for Traditional Chinese (zh-TW) Bible as Chinese Union Version (CUV). This app makes use of [Angular](https://angular.io/) as a frontend framework and [Angular Material](https://material.angular.io/) to fulfill [Material Design](https://material.io/) as visual principle.
