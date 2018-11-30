@@ -5,6 +5,9 @@ import { BibleService } from '../bible-service/bible.service';
 import { TextToSpeechService } from '../bible-service/text-to-speech.service';
 import { BibleVersesItem } from './bible-verses-item';
 
+async function delay(ms: number) {
+  return new Promise( resolve => setTimeout(resolve, ms) );
+}
 @Component({
   selector: 'app-bible-verses',
   templateUrl: './bible-verses.component.html',
@@ -69,14 +72,67 @@ export class BibleVersesComponent implements OnInit {
     }
   }
 
+  playVoice(contentB64: string): boolean {
+    let audio = this.audioPlayerRef.nativeElement;
+    if (!audio.src || audio.paused || audio.ended) {
+      audio.src = contentB64;
+      audio.load();
+      audio.play();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   playVerse(verseContent: string): void {
     this.ttsService.postText(verseContent, 'zh-hk').subscribe(
       responseData => {
-        let audio = this.audioPlayerRef.nativeElement;
-        audio.src = responseData;
-        audio.load();
-        audio.play();
+        this.playVoice(responseData);
       }
     )
+  }
+
+  playVerseItems(bookName: string, chapterName: string, verseItems: BibleVersesItem[]): void {
+    if (bookName) {
+      this.ttsService.postText(bookName, 'zh-hk').subscribe(
+        responseData => {
+          let playResult = this.playVoice(responseData);
+          if (playResult) {
+            this.playVerseItems(null, chapterName, verseItems);
+          } else {
+            delay(500);
+            this.playVerseItems(bookName, chapterName, verseItems);            
+          }
+        }
+      )
+    }
+    if (chapterName) {
+      this.ttsService.postText(chapterName, 'zh-hk').subscribe(
+        responseData => {
+          let playResult = this.playVoice(responseData);
+          if (playResult) {
+            this.playVerseItems(null, null, verseItems);
+          } else {
+            delay(500);
+            this.playVerseItems(null, chapterName, verseItems);            
+          }
+        }
+      )
+    }
+    if (verseItems && verseItems.length > 0) {
+      let verseItem = verseItems.shift();
+      this.ttsService.postText(verseItem.verse_content, 'zh-hk').subscribe(
+        responseData => {
+          let playResult = this.playVoice(responseData);
+          if (playResult) {
+            this.playVerseItems(null, null, verseItems);
+          } else {
+            delay(500);
+            verseItems.unshift(verseItem);
+            this.playVerseItems(null, null, verseItems);            
+          }
+        }
+      )
+    }
   }
 }

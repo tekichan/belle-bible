@@ -24,9 +24,9 @@ export class BibleNavComponent implements OnInit {
   showOldTest: boolean = false;
   showNewTest: boolean = false;
 
-  bookList: any[];
-  oldTestament: any[];
-  newTestament: any[];
+  bookList: any[] = [];
+  oldTestament: any[] = [];
+  newTestament: any[] = [];
 
   randomVerse: any;
 
@@ -56,8 +56,12 @@ export class BibleNavComponent implements OnInit {
   }
 
   displayBook(bookName: string): string {
+    if (bookName && this.bookList.length > 0) {
       let bookObj = this.bookList.find(obj => obj['abbr'] == bookName);
       return bookObj['zh_tw'];
+    } else {
+      return "";
+    }
   }
 
   toggleTestament(testament: string): void {

@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>
+    <mat-card-title (click)="playVerseItems(displayBook(), '第' + selectedChapter + ((selectedBook == 'Psm')?'篇':'章'), verseItems.slice(0))">
       {{displayBook()}} 第 {{selectedChapter}} <span *ngIf="selectedBook == 'Psm';then general_unit else special_unit"></span><ng-template #general_unit>篇</ng-template><ng-template #special_unit>章</ng-template>
     </mat-card-title>
   </mat-card-header>
