@@ -5,9 +5,10 @@ import { BibleService } from '../bible-service/bible.service';
 import { TextToSpeechService } from '../bible-service/text-to-speech.service';
 import { BibleVersesItem } from './bible-verses-item';
 
-async function delay(ms: number) {
-  return new Promise( resolve => setTimeout(resolve, ms) );
-}
+const delay = async (ms: number) => new Promise( resolve => setTimeout(resolve, ms) );
+const countBytes = (str) => encodeURI(str).split(/%..|./).length - 1;
+const voiceByteLimit = 90000;
+
 @Component({
   selector: 'app-bible-verses',
   templateUrl: './bible-verses.component.html',
@@ -63,10 +64,16 @@ export class BibleVersesComponent implements OnInit {
     );
   }
 
-  displayBook(): string {
+  displayBook(lang: string): string {
     if (this.displayBookList) {
       let bookObj = this.displayBookList.find(obj => obj['abbr'] == this.selectedBook);
-      return bookObj['zh_tw'] + ' ' + bookObj['en'];
+      if (lang == 'both') {
+        return bookObj['zh_tw'] + ' ' + bookObj['en'];
+      } else if (lang == 'en') {
+        return bookObj['en'];
+      } else {
+        return bookObj['zh_tw'];
+      }
     } else {
       return '';
     }
@@ -87,49 +94,58 @@ export class BibleVersesComponent implements OnInit {
   playVerse(verseContent: string): void {
     this.ttsService.postText(verseContent, 'zh-hk').subscribe(
       responseData => {
-        this.playVoice(responseData);
+        if (responseData) {
+          if (responseData.startsWith("ERROR")) {
+            alert("Speech can't be played. Please try next time.");
+          } else {
+            let playResult = this.playVoice(responseData);
+            if (!playResult) {
+              alert("Speech can't be played. Please try next time.");
+            }                
+          }
+        } else {
+          alert("Speech can't be played. Please try next time.");
+        }
+      }
+      , error => {
+        console.log(error);
+        alert("Speech can't be played. Please try next time.");
       }
     )
   }
 
   playVerseItems(bookName: string, chapterName: string, verseItems: BibleVersesItem[]): void {
+    let voiceContent: string = "";
+
     if (bookName) {
-      this.ttsService.postText(bookName, 'zh-hk').subscribe(
-        responseData => {
-          let playResult = this.playVoice(responseData);
-          if (playResult) {
-            this.playVerseItems(null, chapterName, verseItems);
-          } else {
-            delay(500);
-            this.playVerseItems(bookName, chapterName, verseItems);            
-          }
-        }
-      )
+      voiceContent += bookName;
     }
     if (chapterName) {
-      this.ttsService.postText(chapterName, 'zh-hk').subscribe(
-        responseData => {
-          let playResult = this.playVoice(responseData);
-          if (playResult) {
-            this.playVerseItems(null, null, verseItems);
-          } else {
-            delay(500);
-            this.playVerseItems(null, chapterName, verseItems);            
-          }
-        }
-      )
+      voiceContent += "\n" + chapterName;
     }
     if (verseItems && verseItems.length > 0) {
-      let verseItem = verseItems.shift();
-      this.ttsService.postText(verseItem.verse_content, 'zh-hk').subscribe(
+      while (verseItems.length > 0 &&
+              countBytes(voiceContent + "\n" + verseItems[0].verse_content) <= voiceByteLimit) {
+        voiceContent += "\n" + verseItems.shift().verse_content;
+      }
+    }
+    
+    if (voiceContent) {
+      this.ttsService.postText(voiceContent, 'zh-hk').subscribe(
         responseData => {
-          let playResult = this.playVoice(responseData);
-          if (playResult) {
-            this.playVerseItems(null, null, verseItems);
+          if (responseData) {
+            if (responseData.startsWith("ERROR")) {
+              alert("Speech can't be played. Please try next time.");
+            } else {
+              let playResult = this.playVoice(responseData);
+              if (!playResult) {
+                alert("Speech can't be played. Please try next time.");
+              } else {
+                this.playVerseItems(null, null, verseItems);
+              }               
+            }
           } else {
-            delay(500);
-            verseItems.unshift(verseItem);
-            this.playVerseItems(null, null, verseItems);            
+            alert("Speech can't be played. Please try next time.");
           }
         }
       )
