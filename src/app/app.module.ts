@@ -1,11 +1,10 @@
+// Import Modules from Angular
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule }    from '@angular/common/http';
 
-import { AppComponent } from './app.component';
-import { BibleNavComponent } from './bible-nav/bible-nav.component';
+// Import Modules from Angular Material
 import { LayoutModule } from '@angular/cdk/layout';
 import { 
   MatToolbarModule
@@ -22,6 +21,10 @@ import {
   , MatMenuModule
   , MatBottomSheetModule
 } from '@angular/material';
+
+// Import Components of the App
+import { AppComponent } from './app.component';
+import { BibleNavComponent } from './bible-nav/bible-nav.component';
 import { BibleVersesComponent } from './bible-verses/bible-verses.component';
 import { BibleChaptersComponent } from './bible-chapters/bible-chapters.component';
 import { BibleHelpComponent } from './bible-help/bible-help.component';

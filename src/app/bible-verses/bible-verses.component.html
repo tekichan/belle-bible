@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title (click)="playVerseItems(displayBook('zh'), '第' + selectedChapter + ((selectedBook == 'Psm')?'篇':'章'), verseItems.slice(0))">
-      {{displayBook('both')}} 第 {{selectedChapter}} <span *ngIf="selectedBook == 'Psm';then general_unit else special_unit"></span><ng-template #general_unit>篇</ng-template><ng-template #special_unit>章</ng-template>
+      {{displayBook('both')}} 第 {{selectedChapter}} <span *ngIf="selectedBook == 'Psm';then general_unit else special_unit"></span><ng-template #general_unit>篇</ng-template><ng-template #special_unit>章</ng-template> &nbsp;<mat-icon style="font-size: 16px !important">volume_up</mat-icon>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
@@ -16,7 +16,7 @@
         <!-- verse_content Column -->
         <ng-container matColumnDef="verse_content">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>經文</th>
-          <td mat-cell *matCellDef="let row" (click)="playVerse(row.verse_content)">{{row.verse_content}}</td>
+          <td mat-cell *matCellDef="let row" (click)="playVerse(row.verse_content)">{{row.verse_content}} &nbsp;<mat-icon style="font-size: 14px !important">volume_up</mat-icon></td>
         </ng-container>
     
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
