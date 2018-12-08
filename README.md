@@ -24,14 +24,14 @@ The next step is to create the app folder and essential components according to 
 
 1. Run `ng new belle-bible` to create an app folder. The fundamental components and configurations have been in place. A Hello-World style app is available. You can run `ng serve` to run the app in your local machine and navigate it at `http://localhost:4200/`.
 2. Run `cd belle-bible` to access the app folder. 
-3. Run `ng generate component [component-name]` to generate components. The command is very helpful as it automatically configures **app.module.ts** to include the components.
+3. Run `ng generate @angular/material:nav bible-nav` to generate the overall navigation look.
+4. Run `ng generate @angular/material:table bible-verses` to generate the page of verses in a data table format.
+5. Run `ng generate component [component-name]` to generate components. The command is very helpful as it automatically configures **app.module.ts** to include the components.
 ```
-ng generate component bible-nav
 ng generate component bible-chapters
-ng generate component bible-verses
 ng generate component bible-help
 ```
-4. Modify **app.module.ts** to include essential framework modules.
+6. Modify **app.module.ts** to include essential framework modules.
 ```
 ...
 import { HttpClientModule }    from '@angular/common/http';
@@ -74,17 +74,33 @@ import {
   ],
 ...  
 ```
-5. Modify **app.module.ts** to include **BibleHelpComponent** as one of entryComponents because we will load BibleHelpComponent with MatBottomSheet imperatively.
+7. Modify **app.module.ts** to include **BibleHelpComponent** as one of entryComponents because we will load BibleHelpComponent with MatBottomSheet imperatively.
 ```
 ...
   entryComponents: [BibleHelpComponent],
 ...
 ```
-6. Modify **index.html** to include Material icons.
+8. Modify **index.html** to include Material icons.
 ```
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
 ```
+9. Modify html files to implement the "view" components.
+- `app.component.html` includes **app-bible-nav** only to show bible-nav component when the app starts.
+- `bible-nav.component.html`
+- `bible-chapters.component.html`
+- `bible-verses.component.html`
+- `bible-help.component.html`
+
+10. Create **bible-service** to integrate external resources or data set. `bible.service.ts` is to retrieve bible content, which is stored in the same location. `text-to-speech.service.ts` is to request Text-To-Spech service from a third party TTS provider.
+
+11. Run `ng serve` for a local development server. Preview the app in the serve. Fine tune codes and logics.
+
+12. Build the app for production deployment.
+`ng build --prod --base-href "https://tekichan.github.io/belle-bible/"`
+
+13. Deploy the app to Github Pages. Browse the app at [https://tekichan.github.io/belle-bible/](https://tekichan.github.io/belle-bible/).
+`ngh --dir=dist/belle-bible`
 
 ## *A little bit about Angular CLI*
 ### Development server
