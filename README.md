@@ -24,15 +24,16 @@ The next step is to create the app folder and essential components according to 
 
 1. Run `ng new belle-bible` to create an app folder. The fundamental components and configurations have been in place. A Hello-World style app is available. You can run `ng serve` to run the app in your local machine and navigate it at `http://localhost:4200/`.
 2. Run `cd belle-bible` to access the app folder. 
-3. Run `ng generate @angular/material:nav bible-nav` to generate the overall navigation look.
-4. Run `ng generate @angular/material:table bible-verses` to generate the page of verses in a data table format.
-5. Run `ng generate component [component-name]` to generate components. The command is very helpful as it automatically configures **app.module.ts** to include the components.
-```
+3. Run `npm install --save @angular/material @angular/cdk @angular/animations` to download Angular Material. Run `npm install --save hammerjs` to download HammerJS for gesture support.
+4. Run `ng generate @angular/material:nav bible-nav` to generate the overall navigation look.
+5. Run `ng generate @angular/material:table bible-verses` to generate the page of verses in a data table format.
+6. Run `ng generate component [component-name]` to generate components. The command is very helpful as it automatically configures **app.module.ts** to include the components.
+```Shell
 ng generate component bible-chapters
 ng generate component bible-help
 ```
-6. Modify **app.module.ts** to include essential framework modules.
-```
+7. Modify **app.module.ts** to include essential framework modules.
+```TypeScript
 ...
 import { HttpClientModule }    from '@angular/common/http';
 ...
@@ -74,35 +75,63 @@ import {
   ],
 ...  
 ```
-7. Modify **app.module.ts** to include **BibleHelpComponent** as one of entryComponents because we will load BibleHelpComponent with MatBottomSheet imperatively.
-```
+8. Modify **app.module.ts** to include **BibleHelpComponent** as one of entryComponents because we will load BibleHelpComponent with MatBottomSheet imperatively.
+```TypeScript
 ...
   entryComponents: [BibleHelpComponent],
 ...
 ```
-8. Modify **index.html** to include Material icons.
+9. Modify **styles.css** to adapt a pre-built theme of Angular Material. Ref: [Theming your Angular Material app](https://material.angular.io/guide/theming)
+```CSS
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 ```
+
+10. Modify **index.html** to include Material icons.
+```HTML
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
 ```
-9. Modify html files to implement the "view" components.
+
+11.  Modify html files to implement the "view" components.
 - `app.component.html` includes **app-bible-nav** only to show bible-nav component when the app starts.
 - `bible-nav.component.html`
 - `bible-chapters.component.html`
 - `bible-verses.component.html`
 - `bible-help.component.html`
 
-10. Create **bible-service** to integrate external resources or data set. `bible.service.ts` is to retrieve bible content, which is stored in the same location. `text-to-speech.service.ts` is to request Text-To-Spech service from a third party TTS provider.
+12. Run `ng generate interface bible-verses-item` under **src/app/bible-verses** folder to generate an interface file for displayed verse line item. Then modify the content for display.
+```TypeScript
+export interface BibleVersesItem {
+    verse_num: number;
+    verse_content: string;
+}
+```
 
-11. Run `ng serve` for a local development server. Preview the app in the serve. Fine tune codes and logics.
+13. Create **bible-service** to integrate external resources or data set. `bible.service.ts` is to retrieve bible content, which is stored in the same location. `text-to-speech.service.ts` is to request Text-To-Spech service from a third party TTS provider.
+```Shell
+mkdir bible-service
+ng generate service bible-service/bible
+ng generate service bible-service/text-to-speech
+ng generate class bible-service/text-to-speech.config
+```
 
-12. Build the app for production deployment.
-`ng build --prod --base-href "https://tekichan.github.io/belle-bible/"`
+14. Implement logics in **ts** files and presentation styles in **css** files. Copy asset files such as Bible's content **bible_cuv_zh_tw.json** and Cross' image **cross.png** to **assets** folder.
 
-13. Deploy the app to Github Pages. Browse the app at [https://tekichan.github.io/belle-bible/](https://tekichan.github.io/belle-bible/).
-`ngh --dir=dist/belle-bible`
+15. Run `ng serve` for a local development server. Preview the app in the serve. Fine tune codes and logics.
 
-## *A little bit about Angular CLI*
+16. Build the app for production deployment.
+```Shell
+ng build --prod --base-href "https://tekichan.github.io/belle-bible/"
+```
+
+17.  Deploy the app to Github Pages. Browse the app at [https://tekichan.github.io/belle-bible/](https://tekichan.github.io/belle-bible/).
+```Shell
+ngh --dir=dist/belle-bible
+```
+
+## Appendix A: *A little bit about Angular CLI*
 ### Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
@@ -120,6 +149,41 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 ### Further help
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Appendix B: *Get started with angular-cli-ghpages*
+### Installation & Setup
+This command has the following prerequisites:
+
+- `Node.js 8.2.0` or higher which brings you `npm 5.2.0` which brings you [`npx`]
+- Git 1.7.6 or higher
+- __optional__: Angular project created via [angular-cli](https://github.com/angular/angular-cli)
+
+To install the command run the following:
+
+```Shell
+npm i angular-cli-ghpages --save-dev
+```
+
+### Usage
+Execute `npx ngh` in order to deploy the project with a build from `dist` folder.  
+__Note: you have to create the  `dist` folder in before (e.g. `ng build --prod`)__
+
+```Shell
+ng build --prod --base-href "https://USERNAME.github.io/REPOSITORY_NAME/"
+npx ngh [OPTIONS]
+```
+
+If you want to push to `gh-pages` on the same repository with your default credentials, then just enter `npx ngh` without any options.
+
+### Usage with Angular CLI 6 or higher
+
+With Angular CLI 6 the build artifacts will be put in a subfolder under `dist`.
+Please take a look at the `dist` folder to see whether there is a subfolder with your project's name or not.
+If yes, you need to specify the deploy directory manually then when using this tool:
+
+```Shell
+npx ngh --dir=dist/[PROJECTNAME]
+```
 
 ## Authors
 - Teki Chan *tekichan@gmail.com*
