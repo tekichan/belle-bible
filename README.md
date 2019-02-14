@@ -131,6 +131,11 @@ ng build --prod --base-href "https://tekichan.github.io/belle-bible/"
 ngh --dir=dist/belle-bible
 ```
 
+## Tutorial
+
+You can find this app's tutorial at YouTube > [Agile Way To Build an App with Angular CLI](https://youtu.be/iDLbqXY7yXE).
+
+
 ## Appendix A: *A little bit about Angular CLI*
 ### Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
@@ -183,6 +188,19 @@ If yes, you need to specify the deploy directory manually then when using this t
 
 ```Shell
 npx ngh --dir=dist/[PROJECTNAME]
+```
+
+## Appendix C: Fix webpack-dev-server vulnerability (Jan 2019)
+
+It is reported that a known low severity security vulnerability detected in webpack-dev-server < 3.1.11. 
+
+[Issue #13342](https://github.com/angular/angular-cli/issues/13342) advises how to resolve it.
+
+```Shell
+npm install webpack-dev-server --save-dev
+npm audit fix
+ng update --all --force
+npm i typescript@">=3.1.6 <3.3.0" --save-dev --save-exact --force
 ```
 
 ## Authors
